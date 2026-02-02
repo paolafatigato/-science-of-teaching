@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neuroscience of Learning - Interactive Slides</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="app">
+    <header class="top-bar">
+      <div class="brand">Neuroscience of Learning</div>
+      <div class="progress" id="progress">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-dots" id="progressDots" aria-hidden="true"></div>
+      </div>
+      <button class="menu-btn" id="menuBtn" aria-label="Open slide menu">☰</button>
+    </header>
+
+    <nav class="slide-menu" id="slideMenu" aria-hidden="true">
+      <div class="menu-header">
+        <div>Jump to a slide</div>
+        <button id="closeMenu" aria-label="Close">✕</button>
+      </div>
+      <div class="menu-list" id="menuList"></div>
+    </nav>
+
+    <main class="slides" id="slides" tabindex="0">
+      <!-- Slide 1.1 -->
+      <section class="slide active" data-title="1.1 Hook" data-section="Introduction">
+        <div class="content center">
+          <div class="counter" id="neuronCounter">0</div>
+          <div class="hook-text">
+            <span>This is how many </span>
+            <button id="revealNeuron" class="inline-reveal">—---------</button>
+            <span> are in your brain</span>
+          </div>
+          <div class="subtitle">Right now, some of them are connecting to form a new memory...</div>
+          <button class="primary" id="startBtn">Let's discover how learning works →</button>
+        </div>
+      </section>
+
+      <!-- Slide 1.2 -->
+      <section class="slide" data-title="1.2 Overview" data-section="Introduction">
+        <div class="content">
+          <h1>Today you become brain scientists 🧠</h1>
+          <div class="icon-list">
+            <div class="icon-card">🧩<span>How memories form</span></div>
+            <div class="icon-card">🕳️<span>Why we forget (and how to fix it)</span></div>
+            <div class="icon-card">⚡<span>Active vs. passive learning</span></div>
+            <div class="icon-card">💓<span>Emotions and memory</span></div>
+            <div class="icon-card">⏳<span>The limits of your brain</span></div>
+          </div>
+          <p class="big">Understanding these will make you better <strong>TEACHERS</strong></p>
+        </div>
+      </section>
+
+      <!-- Slide 2.1 -->
+      <section class="slide" data-title="2.1 Neurons Wire Together" data-section="Neurons & Connections">
+        <div class="content">
+          <h1>Neurons that fire together, wire together</h1>
+          <div class="neuron-demo" id="neuronDemo">
+            <div class="neuron" data-neuron="left" role="button" tabindex="0" aria-pressed="false" aria-label="Left neuron"></div>
+            <div class="synapse" id="synapse"></div>
+            <div class="neuron" data-neuron="right" role="button" tabindex="0" aria-pressed="false" aria-label="Right neuron"></div>
+          </div>
+          <p class="big">Every time you practice, the connection gets stronger.</p>
+          <div class="path">
+            <div class="path-label">Metaphor: a forest path gets clearer</div>
+            <div class="path-line" id="pathLine"></div>
+          </div>
+          <button class="secondary" id="strengthenBtn">Click to strengthen</button>
+        </div>
+      </section>
+
+      <!-- Slide 2.2 -->
+      <section class="slide" data-title="2.2 Name Writing Demo" data-section="Neurons & Connections">
+        <div class="content">
+          <h1>Do you remember learning to write your name?</h1>
+          <p class="big">Watch the line become steady with practice.</p>
+          <div class="writing-demo">
+            <canvas id="writingCanvas" width="700" height="220" aria-label="Writing demo"></canvas>
+            <div class="writing-controls">
+              <button class="secondary" id="playWriting">Play animation</button>
+              <button class="ghost" id="resetWriting">Reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3.1 -->
+      <section class="slide" data-title="3.1 What is a Chunk?" data-section="Chunks & Working Memory">
+        <div class="content">
+          <h1>What is a chunk?</h1>
+          <div class="chunk-demo" id="chunkDemo">
+            <div class="letters">F - B - I</div>
+            <div class="arrow">→</div>
+            <div class="chunk">[FBI]</div>
+          </div>
+          <div class="chunk-examples">
+            <div class="example">L-O-L → <strong>[LOL]</strong></div>
+            <div class="example">1-9-4-5 → <strong>[1945]</strong> (end of WW2)</div>
+            <div class="example">♫ notes → <strong>[a melody you know]</strong></div>
+          </div>
+          <p class="big">A chunk is a group of information that your brain treats as <strong>ONE thing</strong>.</p>
+          <p class="highlight">Chunking helps you remember more!</p>
+        </div>
+      </section>
+
+      <!-- Slide 3.1.2 -->
+      <section class="slide letter-slide" data-title="3.1.2 Chunking Test" data-section="Chunks & Working Memory">
+        <div class="content">
+          <h1>Memory test: letters in random order</h1>
+          <p class="big">You will see letters for 11 seconds. Try to remember as many as possible.</p>
+          <div class="letter-test" id="letterTest">
+            <div class="letter-timer" id="letterTimer" aria-live="polite">
+              <span id="letterTimerValue">11</span>
+            </div>
+            <div class="letter-display" id="letterDisplay">Ready?</div>
+            <div class="letter-controls">
+              <button class="primary" id="startRandomLetters">Start random letters</button>
+              <button class="secondary" id="reviewRandomLetters">Review last random letters</button>
+              <button class="secondary" id="startSentenceLetters">Start sentence letters</button>
+              <button class="ghost" id="resetLetters">Reset</button>
+            </div>
+            <div class="letter-instructions">Phase 1: random order. Phase 2: same letters in the sentence order.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3.2 -->
+      <section class="slide" data-title="3.2 Magic Number Quiz" data-section="Chunks & Working Memory">
+        <div class="content">
+          <h1>How many chunks can your working memory hold?</h1>
+          <div class="quiz">
+            <input type="number" id="magicInput" placeholder="Type a number" min="1" max="15" />
+            <button class="primary" id="magicCheck">Check</button>
+          </div>
+          <div class="brain" id="brain">🧠</div>
+          <div class="feedback" id="magicFeedback">Make a guess!</div>
+          <div class="reveal" id="magicReveal" hidden>
+            <p><strong>The Magic Number is 7 ± 2</strong> (George Miller, 1956).</p>
+            <p>This is why phone numbers are chunked: 333-456-7890 (3 chunks), not 3334567890 (10 items).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3.3 -->
+      <section class="slide" data-title="3.3 Chunk Builder Game" data-section="Chunks & Working Memory">
+        <div class="content">
+          <h1>Build Your Chunks!</h1>
+          <p class="big">Drag a verb to the correct phrase.</p>
+          <div class="game" id="chunkGame">
+            <div class="word-bank" id="verbs"></div>
+            <div class="targets" id="phrases"></div>
+          </div>
+          <div class="score">Score: <span id="score">0</span>/8</div>
+          <div class="feedback" id="chunkFeedback">Go!</div>
+        </div>
+      </section>
+
+      <!-- Slide 4.1 -->
+      <section class="slide" data-title="4.1 The Forgetting Curve" data-section="The Forgetting Curve">
+        <div class="content">
+          <h1>Ebbinghaus Discovery</h1>
+          <canvas id="forgettingCanvas" width="760" height="360" aria-label="Forgetting curve"></canvas>
+          <p class="big dramatic">After 24 hours, you forget 70%!</p>
+        </div>
+      </section>
+
+      <!-- Slide 4.2 -->
+      <section class="slide" data-title="4.2 Spaced Repetition" data-section="The Forgetting Curve">
+        <div class="content">
+          <h1>The solution: spaced repetition</h1>
+          <canvas id="spacedCanvas" width="760" height="360" aria-label="Spaced repetition curve"></canvas>
+          <p class="big">Each review makes the curve flatter.</p>
+        </div>
+      </section>
+
+      <!-- Slide 4.3 -->
+      <section class="slide" data-title="4.3 Memory Experiment" data-section="The Forgetting Curve">
+        <div class="content">
+          <h1>Memory Experiment</h1>
+          <p class="big">10 words will flash. Type the words you remember.</p>
+          <div class="experiment">
+            <div class="flash" id="flashWord">Ready?</div>
+            <button class="primary" id="startFlash">Start</button>
+            <textarea id="recallInput" rows="4" placeholder="Type your words here..."></textarea>
+            <button class="secondary" id="checkRecall">Check</button>
+            <div class="feedback" id="recallFeedback"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4.4 -->
+      <section class="slide" data-title="4.4 Beat the Forgetting Curve" data-section="The Forgetting Curve">
+        <div class="content">
+          <h1>Beat the Forgetting Curve</h1>
+          <p class="big">Click items before they fade. Survive 60 seconds!</p>
+          <div class="game" id="fadeGame"></div>
+          <div class="game-bar">
+            <button class="primary" id="startFade">Start game</button>
+            <div class="timer">Time: <span id="gameTime">60</span>s</div>
+          </div>
+          <div class="feedback" id="fadeFeedback"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="nav">
+      <button class="nav-btn" id="prevBtn" aria-label="Previous slide">◀</button>
+      <span class="nav-info" id="navInfo">1 / 12</span>
+      <button class="nav-btn" id="nextBtn" aria-label="Next slide">▶</button>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
