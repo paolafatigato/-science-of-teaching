@@ -160,11 +160,32 @@
       </section>
 
       <!-- Slide 4.1 -->
-      <section class="slide" data-title="4.1 The Forgetting Curve" data-section="The Forgetting Curve">
+      <section class="slide" data-title="4.1 Hippocampus Matchup" data-section="Memory & Navigation">
         <div class="content">
-          <h1>Ebbinghaus Discovery</h1>
-          <canvas id="forgettingCanvas" width="760" height="360" aria-label="Forgetting curve"></canvas>
-          <p class="big dramatic">After 24 hours, you forget 70%!</p>
+          <h1>Who has the BIGGER hippocampus?</h1>
+          <p class="subtitle">The hippocampus is the part of your brain for memory and navigation</p>
+          <div class="round-label">Round 1</div>
+          <div class="hippocampus-matchup" id="hippocampusMatchup">
+            <button class="contender-card" data-choice="professor" aria-label="University Professor">
+              <div class="contender-title">University Professor</div>
+              <div class="contender-icons">👓 📚 🎓</div>
+              <div class="contender-brain">🧠</div>
+              <div class="contender-tag">LEFT</div>
+            </button>
+            <div class="versus">VS</div>
+            <button class="contender-card taxi" data-choice="taxi" data-correct="true" aria-label="London Taxi Driver">
+              <div class="contender-title">London Taxi Driver</div>
+              <div class="contender-icons">🚕 🗺️ 🇬🇧</div>
+              <div class="contender-brain">🧠</div>
+              <div class="contender-tag">RIGHT</div>
+            </button>
+          </div>
+          <div class="question">Who has the bigger hippocampus?</div>
+          <div class="hippo-feedback" id="hippoFeedback">Click a contender to vote.</div>
+          <div class="hippo-reveal" id="hippoReveal" hidden>
+            <strong>Taxi Driver wins!</strong>
+            <span>London taxi drivers memorize 25,000 streets. Their hippocampus grows up to 20% bigger!</span>
+          </div>
         </div>
       </section>
 
@@ -203,6 +224,97 @@
             <div class="timer">Time: <span id="gameTime">60</span>s</div>
           </div>
           <div class="feedback" id="fadeFeedback"></div>
+        </div>
+      </section>
+
+      <!-- Slide 5.2 -->
+      <section class="slide" data-title="5.2 Interactive: Swimming Analogy" data-section="Active vs Passive Learning">
+        <div class="ondebox" aria-hidden="true">
+          <svg class="onde" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+               viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+              <path id="onda" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352Z" />
+            </defs>
+            <g class="parallaxonde">
+              <use xlink:href="#onda" x="48" y="0" class="onda-1" />
+              <use xlink:href="#onda" x="48" y="3" class="onda-2" />
+              <use xlink:href="#onda" x="48" y="5" class="onda-3" />
+              <use xlink:href="#onda" x="48" y="7" class="onda-4" />
+            </g>
+          </svg>
+        </div>
+        <div class="content swim-content">
+          <h1>Interactive: Swimming Analogy</h1>
+
+          <p class="big">Which one teaches you to swim?</p>
+          <div class="option-grid" id="swimOptions">
+            <button class="option-card" data-correct="false">Read a book about swimming</button>
+            <button class="option-card" data-correct="false">Watch a video about swimming</button>
+            <button class="option-card" data-correct="true">Get in the water and try</button>
+          </div>
+          <div class="feedback" id="swimFeedback">Choose one option.</div>
+          <div class="learning-line" id="swimLearning" hidden>Learning English works the same way. Learning ANYTHING works the same way.</div>
+        </div>
+      </section>
+
+      <!-- Slide 5.3 -->
+      <section class="slide" data-title="5.3 Quick Quiz" data-section="Active vs Passive Learning">
+        <div class="content">
+          <h1>Quick Quiz: Active or Passive?</h1>
+          <p class="big">Click ACTIVE or PASSIVE for each activity.</p>
+          <div class="quiz-score">Score: <span id="apScore">0</span>/<span id="apTotal">7</span></div>
+          <div class="ap-quiz" id="apQuiz">
+            <div class="ap-item" data-answer="passive">
+              <div class="ap-text">Listening to teacher talk</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+            <div class="ap-item" data-answer="active">
+              <div class="ap-text">Doing exercises</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+            <div class="ap-item" data-answer="active">
+              <div class="ap-text">Teaching a friend</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+            <div class="ap-item" data-answer="passive">
+              <div class="ap-text">Copying from the board</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+            <div class="ap-item" data-answer="active">
+              <div class="ap-text">Playing a vocabulary game</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+            <div class="ap-item" data-answer="passive">
+              <div class="ap-text">Watching a video</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+            <div class="ap-item" data-answer="active">
+              <div class="ap-text">Creating a presentation</div>
+              <div class="ap-actions">
+                <button class="ap-btn" data-choice="active">Active</button>
+                <button class="ap-btn" data-choice="passive">Passive</button>
+              </div>
+            </div>
+          </div>
+          <div class="ap-feedback" id="apFeedback">Make your picks!</div>
         </div>
       </section>
     </main>

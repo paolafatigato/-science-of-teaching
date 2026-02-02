@@ -436,9 +436,56 @@ phrasesContainer.addEventListener("drop", (event) => {
   }
 });
 
-// Slide 4.1 forgetting curve
+// Slide 4.1 hippocampus matchup
+const hippoMatchup = document.getElementById("hippocampusMatchup");
+const hippoFeedback = document.getElementById("hippoFeedback");
+const hippoReveal = document.getElementById("hippoReveal");
+const hippoCards = hippoMatchup ? Array.from(hippoMatchup.querySelectorAll(".contender-card")) : [];
+const hippoWinner = hippoMatchup ? hippoMatchup.querySelector(".contender-card[data-correct='true']") : null;
+
+function resetHippocampusMatchup() {
+  if (!hippoMatchup) return;
+  hippoMatchup.dataset.revealed = "false";
+  hippoMatchup.classList.remove("revealed");
+  hippoCards.forEach((card) => {
+    card.disabled = false;
+    card.classList.remove("picked", "winner", "loser");
+  });
+  if (hippoReveal) hippoReveal.hidden = true;
+  if (hippoFeedback) hippoFeedback.textContent = "Click a contender to vote.";
+}
+
+if (hippoMatchup) {
+  hippoMatchup.addEventListener("click", (event) => {
+    const card = event.target.closest(".contender-card");
+    if (!card || hippoMatchup.dataset.revealed === "true") return;
+
+    hippoMatchup.dataset.revealed = "true";
+    hippoMatchup.classList.add("revealed");
+
+    hippoCards.forEach((btn) => {
+      btn.disabled = true;
+      btn.classList.toggle("picked", btn === card);
+    });
+
+    if (hippoWinner) {
+      hippoWinner.classList.add("winner");
+      hippoCards.filter((btn) => btn !== hippoWinner).forEach((btn) => btn.classList.add("loser"));
+    }
+
+    if (hippoFeedback) {
+      hippoFeedback.textContent = card.dataset.choice === "professor"
+        ? "Most students pick the professor... but watch the reveal!"
+        : "Great guess! Watch the reveal.";
+    }
+
+    if (hippoReveal) hippoReveal.hidden = false;
+  });
+}
+
+// Slide 4.1 forgetting curve (removed from deck, keep safe guards)
 const forgettingCanvas = document.getElementById("forgettingCanvas");
-const fctx = forgettingCanvas.getContext("2d");
+const fctx = forgettingCanvas ? forgettingCanvas.getContext("2d") : null;
 
 function drawAxes(ctx, width, height) {
   ctx.strokeStyle = "rgba(255,255,255,0.6)";
@@ -455,6 +502,7 @@ function drawAxes(ctx, width, height) {
 }
 
 function drawForgettingCurve() {
+  if (!forgettingCanvas || !fctx) return;
   fctx.clearRect(0, 0, forgettingCanvas.width, forgettingCanvas.height);
   drawAxes(fctx, forgettingCanvas.width, forgettingCanvas.height);
   fctx.strokeStyle = "#ff6b6b";
@@ -472,9 +520,10 @@ function drawForgettingCurve() {
 
 // Slide 4.2 spaced repetition
 const spacedCanvas = document.getElementById("spacedCanvas");
-const sctx = spacedCanvas.getContext("2d");
+const sctx = spacedCanvas ? spacedCanvas.getContext("2d") : null;
 
 function drawSpacedCurve() {
+  if (!spacedCanvas || !sctx) return;
   sctx.clearRect(0, 0, spacedCanvas.width, spacedCanvas.height);
   drawAxes(sctx, spacedCanvas.width, spacedCanvas.height);
   sctx.strokeStyle = "#53d8fb";
@@ -614,9 +663,83 @@ fadeGame.addEventListener("click", (event) => {
 
 startFade.addEventListener("click", startFadeGame);
 
+// Slide 5.2 swimming analogy
+const swimOptions = document.getElementById("swimOptions");
+const swimFeedback = document.getElementById("swimFeedback");
+const swimLearning = document.getElementById("swimLearning");
+
+if (swimOptions) {
+  swimOptions.addEventListener("click", (event) => {
+    const btn = event.target.closest(".option-card");
+    if (!btn) return;
+    swimOptions.querySelectorAll(".option-card").forEach((card) => {
+      card.classList.remove("selected", "correct", "wrong");
+    });
+    const isCorrect = btn.dataset.correct === "true";
+    btn.classList.add("selected", isCorrect ? "correct" : "wrong");
+    if (swimFeedback) {
+      swimFeedback.textContent = isCorrect
+        ? "Yes! You learn by doing."
+        : "Not quite. Real learning comes from practice.";
+    }
+    if (swimLearning) {
+      swimLearning.hidden = !isCorrect;
+      if (isCorrect) swimLearning.classList.add("show");
+    }
+  });
+}
+
+// Slide 5.3 active/passive quiz
+const apQuiz = document.getElementById("apQuiz");
+const apScore = document.getElementById("apScore");
+const apTotal = document.getElementById("apTotal");
+const apFeedback = document.getElementById("apFeedback");
+
+let apScoreValue = 0;
+let apAnswered = 0;
+const apItems = apQuiz ? Array.from(apQuiz.querySelectorAll(".ap-item")) : [];
+
+if (apTotal) {
+  apTotal.textContent = String(apItems.length);
+}
+
+if (apQuiz) {
+  apQuiz.addEventListener("click", (event) => {
+    const btn = event.target.closest(".ap-btn");
+    if (!btn) return;
+    const item = btn.closest(".ap-item");
+    if (!item || item.dataset.answered === "true") return;
+
+    const choice = btn.dataset.choice;
+    const answer = item.dataset.answer;
+    const isCorrect = choice === answer;
+    item.dataset.answered = "true";
+    item.classList.add(isCorrect ? "correct" : "wrong", "flash");
+
+    item.querySelectorAll(".ap-btn").forEach((button) => {
+      button.disabled = true;
+    });
+
+    if (isCorrect) {
+      apScoreValue += 1;
+      if (apScore) apScore.textContent = String(apScoreValue);
+    }
+
+    apAnswered += 1;
+    if (apFeedback) {
+      apFeedback.textContent = isCorrect ? "Correct!" : "Not quite.";
+      if (apAnswered === apItems.length) {
+        apFeedback.textContent = `Done! Your score: ${apScoreValue} / ${apItems.length}.`;
+      }
+    }
+
+    setTimeout(() => item.classList.remove("flash"), 500);
+  });
+}
+
 function handleSlideActivation() {
   if (currentSlide === 0) startCounter();
-  if (currentSlide === 8) drawForgettingCurve();
+  if (currentSlide === 8) resetHippocampusMatchup();
   if (currentSlide === 9) drawSpacedCurve();
 }
 

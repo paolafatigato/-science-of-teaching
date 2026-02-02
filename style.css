@@ -577,6 +577,240 @@ textarea {
   margin-top: 16px;
 }
 
+.ondebox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.onde {
+  position: relative;
+  width: 100%;
+  height: 15vh;
+  margin-bottom: -7px;
+  min-height: 100px;
+  max-height: 150px;
+}
+
+.slide[data-title="5.2 Interactive: Swimming Analogy"] {
+  background: #e9f2fd;
+}
+
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .content {
+  background: #cfe3ff;
+  color: #0f1226;
+}
+
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .content h1,
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .content .big,
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .content p,
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .content .feedback,
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .content .learning-line {
+  color: #0f1226;
+}
+
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .option-card {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  color: #0b0f2a;
+  font-weight: 600;
+}
+
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .option-card.correct {
+  box-shadow: 0 0 0 2px rgba(70, 244, 179, 0.7);
+}
+
+.slide[data-title="5.2 Interactive: Swimming Analogy"] .option-card.wrong {
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.7);
+}
+
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .top-bar,
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .nav {
+  background: #e9f2fd;
+  border-color: rgba(15, 18, 38, 0.08);
+}
+
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .brand,
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .nav-info,
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .menu-btn,
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .nav-btn {
+  color: #0f1226;
+}
+
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .menu-btn,
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .nav-btn {
+  background: rgba(15, 18, 38, 0.08);
+}
+
+body:has(.slide[data-title="5.2 Interactive: Swimming Analogy"].active) .progress {
+  background: rgba(15, 18, 38, 0.08);
+}
+
+
+
+.onda-1 { fill: rgba(83, 216, 251, 0.55); }
+.onda-2 { fill: rgba(141, 123, 255, 0.45); }
+.onda-3 { fill: rgba(70, 244, 179, 0.25); }
+.onda-4 { fill: rgba(245, 247, 255, 0.9); }
+
+.parallaxonde > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+
+.parallaxonde > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.parallaxonde > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.parallaxonde > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.parallaxonde > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+
+.swim-content {
+  text-align: center;
+  position: relative;
+  z-index: 3;
+  margin-top: 70px;
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 12px 0 8px;
+}
+
+.option-card {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
+}
+
+.option-card.selected {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.option-card.correct {
+  background: rgba(70, 244, 179, 0.2);
+  border: 1px solid rgba(70, 244, 179, 0.6);
+}
+
+.option-card.wrong {
+  background: rgba(255, 107, 107, 0.2);
+  border: 1px solid rgba(255, 107, 107, 0.6);
+}
+
+.learning-line {
+  margin-top: 14px;
+  font-size: 20px;
+  color: var(--accent-3);
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.learning-line.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quiz-score {
+  font-size: 20px;
+  margin: 10px 0 14px;
+}
+
+.ap-quiz {
+  display: grid;
+  gap: 12px;
+}
+
+.ap-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ap-item.correct {
+  border-color: rgba(70, 244, 179, 0.6);
+}
+
+.ap-item.wrong {
+  border-color: rgba(255, 107, 107, 0.6);
+}
+
+.ap-item.flash.correct {
+  box-shadow: 0 0 0 4px rgba(70, 244, 179, 0.35);
+}
+
+.ap-item.flash.wrong {
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.35);
+}
+
+.ap-text {
+  font-size: 18px;
+}
+
+.ap-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ap-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.ap-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ap-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ap-feedback {
+  font-size: 20px;
+  margin-top: 12px;
+}
+
 .nav {
   display: flex;
   align-items: center;
@@ -613,6 +847,125 @@ textarea {
   border-radius: 12px;
 }
 
+.round-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.hippocampus-matchup {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  margin: 20px 0 10px;
+}
+
+.contender-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 18px;
+  color: var(--text);
+  display: grid;
+  gap: 10px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease, opacity 0.2s ease;
+}
+
+.contender-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.contender-card:disabled {
+  cursor: default;
+}
+
+.contender-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.contender-icons {
+  font-size: 22px;
+  opacity: 0.9;
+}
+
+.contender-brain {
+  font-size: 38px;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.contender-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.versus {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--accent-2);
+}
+
+.question {
+  font-size: 22px;
+  margin-top: 8px;
+}
+
+.hippo-feedback {
+  margin-top: 10px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.hippo-reveal {
+  margin-top: 12px;
+  display: grid;
+  gap: 6px;
+  background: rgba(70, 244, 179, 0.12);
+  border: 1px solid rgba(70, 244, 179, 0.4);
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
+.contender-card.picked {
+  outline: 2px solid rgba(83, 216, 251, 0.6);
+  outline-offset: 2px;
+}
+
+.contender-card.winner {
+  border-color: rgba(70, 244, 179, 0.8);
+  box-shadow: 0 0 24px rgba(70, 244, 179, 0.45);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.contender-card.winner .contender-brain {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 12px rgba(70, 244, 179, 0.85));
+  animation: brainGlow 1.2s ease-in-out infinite;
+}
+
+.contender-card.loser {
+  opacity: 0.6;
+}
+
+@keyframes brainGlow {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1.1); }
+}
+
 @keyframes pop {
   from { transform: scale(0.95); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -635,10 +988,40 @@ textarea {
   }
 }
 
+@keyframes waveMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(-15%); }
+}
+
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
 @media (max-width: 900px) {
   .content { padding: 24px; }
   .slide { padding: 20px; }
   h1 { font-size: 28px; }
   p, .big { font-size: 18px; }
   .game { grid-template-columns: 1fr; }
+  .ap-item { grid-template-columns: 1fr; }
+  .ap-actions { justify-content: flex-start; }
+  .hippocampus-matchup {
+    grid-template-columns: 1fr;
+  }
+  .versus {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .onde {
+    height: 40px;
+    min-height: 40px;
+  }
 }
