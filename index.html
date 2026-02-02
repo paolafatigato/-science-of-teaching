@@ -74,16 +74,42 @@
       </section>
 
       <!-- Slide 2.2 -->
-      <section class="slide" data-title="2.2 Name Writing Demo" data-section="Neurons & Connections">
+      <section class="slide light-bg" data-title="2.2 Hippocampus Matchup" data-section="Neurons & Connections">
         <div class="content">
-          <h1>Do you remember learning to write your name?</h1>
-          <p class="big">Watch the line become steady with practice.</p>
-          <div class="writing-demo">
-            <canvas id="writingCanvas" width="700" height="220" aria-label="Writing demo"></canvas>
-            <div class="writing-controls">
-              <button class="secondary" id="playWriting">Play animation</button>
-              <button class="ghost" id="resetWriting">Reset</button>
-            </div>
+          <h1>Who has the BIGGER hippocampus?</h1>
+          <p class="subtitle">The hippocampus is the part of your brain for memory and navigation</p>
+          <div class="round-label">Round 1</div>
+          <div class="hippocampus-matchup" id="hippocampusMatchup">
+            <button class="contender-card" data-choice="professor" aria-label="University Professor">
+              <div class="contender-title">University Professor</div>
+              <div class="contender-icons">🎓</div>
+            </button>
+            <button class="contender-card taxi" data-choice="taxi" data-correct="true" aria-label="London Taxi Driver">
+              <div class="contender-title">London Taxi Driver</div>
+              <div class="contender-icons">🚕</div>
+            </button>
+            <button class="contender-card" data-choice="athlete" aria-label="Athlete">
+              <div class="contender-title">Athlete</div>
+              <div class="contender-icons">🏃‍♂️</div>
+            </button>
+            <button class="contender-card" data-choice="electrician" aria-label="Electrician">
+              <div class="contender-title">Electrician</div>
+              <div class="contender-icons">⚡</div>
+            </button>
+            <button class="contender-card" data-choice="actress" aria-label="Actress">
+              <div class="contender-title">Actress</div>
+              <div class="contender-icons">🎭</div>
+            </button>
+            <button class="contender-card" data-choice="doctor" aria-label="Doctor">
+              <div class="contender-title">Doctor</div>
+              <div class="contender-icons">🩺</div>
+            </button>
+          </div>
+          <div class="question">Who has the bigger hippocampus?</div>
+          <div class="hippo-feedback" id="hippoFeedback">Click a contender to vote.</div>
+          <div class="hippo-reveal" id="hippoReveal" hidden>
+            <strong>Taxi Driver wins!</strong>
+            <span>London taxi drivers memorize 25,000 streets. Their hippocampus grows up to 20% bigger!</span>
           </div>
         </div>
       </section>
@@ -160,31 +186,121 @@
       </section>
 
       <!-- Slide 4.1 -->
-      <section class="slide" data-title="4.1 Hippocampus Matchup" data-section="Memory & Navigation">
-        <div class="content">
-          <h1>Who has the BIGGER hippocampus?</h1>
-          <p class="subtitle">The hippocampus is the part of your brain for memory and navigation</p>
-          <div class="round-label">Round 1</div>
-          <div class="hippocampus-matchup" id="hippocampusMatchup">
-            <button class="contender-card" data-choice="professor" aria-label="University Professor">
-              <div class="contender-title">University Professor</div>
-              <div class="contender-icons">👓 📚 🎓</div>
-              <div class="contender-brain">🧠</div>
-              <div class="contender-tag">LEFT</div>
-            </button>
-            <div class="versus">VS</div>
-            <button class="contender-card taxi" data-choice="taxi" data-correct="true" aria-label="London Taxi Driver">
-              <div class="contender-title">London Taxi Driver</div>
-              <div class="contender-icons">🚕 🗺️ 🇬🇧</div>
-              <div class="contender-brain">🧠</div>
-              <div class="contender-tag">RIGHT</div>
-            </button>
+      <section class="slide" data-title="4.1 Ebbinghaus Game" data-section="The Forgetting Curve" id="ebbinghausSlide">
+        <div class="content ebbinghaus">
+          <div class="eb-header">
+            <h1>How much did Ebbinghaus forget?</h1>
+            <p class="subtitle">Hermann Ebbinghaus memorized nonsense words like DAX, BUP, ZOL and tested his memory</p>
           </div>
-          <div class="question">Who has the bigger hippocampus?</div>
-          <div class="hippo-feedback" id="hippoFeedback">Click a contender to vote.</div>
-          <div class="hippo-reveal" id="hippoReveal" hidden>
-            <strong>Taxi Driver wins!</strong>
-            <span>London taxi drivers memorize 25,000 streets. Their hippocampus grows up to 20% bigger!</span>
+
+          <div class="eb-stepper" id="ebStepper" aria-label="Ebbinghaus steps"></div>
+
+          <div class="eb-views">
+            <div class="eb-view" id="ebRoundView">
+              <div class="eb-round-top">
+                <div class="round-label" id="ebRoundLabel">Round 1</div>
+                <div class="eb-clock" id="ebClock">⏱️ 20 minutes</div>
+              </div>
+              <h2 class="eb-question" id="ebQuestion">What percentage did he FORGET?</h2>
+
+              <div class="eb-inputs">
+                <label for="ebRange">Your guess</label>
+                <div class="eb-input-row">
+                  <input type="range" id="ebRange" min="0" max="100" value="50" />
+                  <div class="eb-number-wrap">
+                    <input type="number" id="ebNumber" min="0" max="100" value="50" />
+                    <span>%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="eb-options" id="ebOptions" aria-label="Quick options">
+                <button class="option-pill" data-value="10">10%</button>
+                <button class="option-pill" data-value="20">20%</button>
+                <button class="option-pill" data-value="40">40%</button>
+                <button class="option-pill" data-value="60">60%</button>
+                <button class="option-pill" data-value="80">80%</button>
+              </div>
+
+              <div class="eb-actions">
+                <button class="primary" id="ebRevealBtn">Reveal</button>
+                <button class="ghost" id="ebResetGuess">Reset</button>
+              </div>
+
+              <div class="eb-feedback" id="ebReaction">Make a guess!</div>
+
+              <div class="eb-reveal" id="ebReveal" hidden>
+                <div class="eb-reveal-main">
+                  <span class="eb-reveal-value" id="ebRevealValue">40%</span>
+                  <span class="eb-reveal-label">forgotten</span>
+                </div>
+                <div class="eb-reveal-text" id="ebRevealText">40% forgotten after 20 minutes.</div>
+                <div class="eb-brain" id="ebBrain" style="--fade: 0%">
+                  <span class="eb-brain-emoji">🧠</span>
+                  <div class="eb-brain-fade" aria-hidden="true"></div>
+                  <div class="eb-brain-label" id="ebBrainLabel">Forgotten: 40%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="eb-view" id="ebPlotView" hidden>
+              <div class="eb-plot">
+                <h2>But wait! Ebbinghaus found a SOLUTION!</h2>
+                <div class="eb-curve" id="ebCurve">
+                  <svg viewBox="0 0 520 220" role="img" aria-label="Forgetting curve with review points">
+                    <path class="curve-path" d="M20 40 C120 120, 220 140, 320 160 S470 190, 500 190" />
+                    <path class="curve-review" d="M20 40 C120 120, 220 140, 320 160 S470 190, 500 190" />
+                    <circle class="review-point" cx="180" cy="128" r="8" />
+                    <circle class="review-point" cx="300" cy="154" r="8" />
+                    <circle class="review-point" cx="420" cy="176" r="8" />
+                  </svg>
+                </div>
+                <p class="big">Every time you <strong>REVIEW</strong>, you forget slower. Small reviews = big results!</p>
+              </div>
+            </div>
+
+            <div class="eb-view" id="ebCompareView" hidden>
+              <div class="eb-compare">
+                <h2>Who remembers more after one month?</h2>
+                <p class="subtitle">Choose a scenario.</p>
+                <div class="eb-scenarios" id="ebScenarios">
+                  <button class="eb-scenario" data-choice="A">
+                    <strong>Student A</strong>
+                    <span>Studies 2 hours, never reviews</span>
+                  </button>
+                  <button class="eb-scenario" data-choice="B">
+                    <strong>Student B</strong>
+                    <span>Studies 30 minutes, reviews 4 times during the month</span>
+                  </button>
+                </div>
+                <div class="eb-compare-feedback" id="ebCompareFeedback">Make a choice.</div>
+                <div class="eb-bars" id="ebBars" hidden>
+                  <div class="eb-bar-row">
+                    <span>Student A</span>
+                    <div class="eb-bar"><div class="eb-bar-fill" id="ebBarA"></div></div>
+                    <span class="eb-bar-value" id="ebBarValueA">20%</span>
+                  </div>
+                  <div class="eb-bar-row">
+                    <span>Student B</span>
+                    <div class="eb-bar"><div class="eb-bar-fill" id="ebBarB"></div></div>
+                    <span class="eb-bar-value" id="ebBarValueB">65%</span>
+                  </div>
+                </div>
+                <div class="eb-compare-reveal" id="ebCompareReveal" hidden>Student B remembers much more!</div>
+              </div>
+            </div>
+
+            <div class="eb-view" id="ebTakeawayView" hidden>
+              <div class="eb-takeaway">
+                <h2>Final Takeaway</h2>
+                <p class="big dramatic">Don’t study more. Study SMARTER. Review, review, review!</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="eb-nav">
+            <button class="secondary" id="ebPrevStep">Back</button>
+            <button class="primary" id="ebNextStep">Next</button>
           </div>
         </div>
       </section>

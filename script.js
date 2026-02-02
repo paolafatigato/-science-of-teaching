@@ -9,6 +9,7 @@ const menuBtn = document.getElementById("menuBtn");
 const slideMenu = document.getElementById("slideMenu");
 const menuList = document.getElementById("menuList");
 const closeMenu = document.getElementById("closeMenu");
+const app = document.getElementById("app");
 
 let currentSlide = 0;
 
@@ -145,13 +146,14 @@ strengthenBtn.addEventListener("click", () => {
   pathLine.classList.toggle("strong", shouldActivateAll);
 });
 
-// Slide 2.2 writing demo
+// Slide 2.2 writing demo (slide removed, keep guards)
 const writingCanvas = document.getElementById("writingCanvas");
 const playWriting = document.getElementById("playWriting");
 const resetWriting = document.getElementById("resetWriting");
-const wctx = writingCanvas.getContext("2d");
+const wctx = writingCanvas ? writingCanvas.getContext("2d") : null;
 
 function drawLine(progress = 0, shake = 1) {
+  if (!wctx || !writingCanvas) return;
   wctx.clearRect(0, 0, writingCanvas.width, writingCanvas.height);
   wctx.lineWidth = 4;
   wctx.strokeStyle = "#53d8fb";
@@ -168,6 +170,7 @@ function drawLine(progress = 0, shake = 1) {
 
 let writingFrame;
 function animateWriting() {
+  if (!wctx) return;
   let t = 0;
   function step() {
     t += 0.01;
@@ -181,8 +184,12 @@ function animateWriting() {
   step();
 }
 
-playWriting.addEventListener("click", animateWriting);
-resetWriting.addEventListener("click", () => drawLine(0, 1));
+if (playWriting) {
+  playWriting.addEventListener("click", animateWriting);
+}
+if (resetWriting) {
+  resetWriting.addEventListener("click", () => drawLine(0, 1));
+}
 
 // Slide 3.1.2 letter test
 const letterDisplay = document.getElementById("letterDisplay");
@@ -443,6 +450,8 @@ const hippoReveal = document.getElementById("hippoReveal");
 const hippoCards = hippoMatchup ? Array.from(hippoMatchup.querySelectorAll(".contender-card")) : [];
 const hippoWinner = hippoMatchup ? hippoMatchup.querySelector(".contender-card[data-correct='true']") : null;
 
+if (hippoReveal) hippoReveal.hidden = true;
+
 function resetHippocampusMatchup() {
   if (!hippoMatchup) return;
   hippoMatchup.dataset.revealed = "false";
@@ -482,6 +491,291 @@ if (hippoMatchup) {
     if (hippoReveal) hippoReveal.hidden = false;
   });
 }
+
+// Slide 4.1 Ebbinghaus game
+const ebbinghausSlide = document.getElementById("ebbinghausSlide");
+const ebStepper = document.getElementById("ebStepper");
+const ebRoundView = document.getElementById("ebRoundView");
+const ebPlotView = document.getElementById("ebPlotView");
+const ebCompareView = document.getElementById("ebCompareView");
+const ebTakeawayView = document.getElementById("ebTakeawayView");
+const ebRoundLabel = document.getElementById("ebRoundLabel");
+const ebClock = document.getElementById("ebClock");
+const ebQuestion = document.getElementById("ebQuestion");
+const ebRange = document.getElementById("ebRange");
+const ebNumber = document.getElementById("ebNumber");
+const ebOptions = document.getElementById("ebOptions");
+const ebRevealBtn = document.getElementById("ebRevealBtn");
+const ebResetGuess = document.getElementById("ebResetGuess");
+const ebReaction = document.getElementById("ebReaction");
+const ebReveal = document.getElementById("ebReveal");
+const ebRevealValue = document.getElementById("ebRevealValue");
+const ebRevealText = document.getElementById("ebRevealText");
+const ebBrain = document.getElementById("ebBrain");
+const ebBrainLabel = document.getElementById("ebBrainLabel");
+const ebPrevStep = document.getElementById("ebPrevStep");
+const ebNextStep = document.getElementById("ebNextStep");
+const ebCurve = document.getElementById("ebCurve");
+const ebScenarios = document.getElementById("ebScenarios");
+const ebCompareFeedback = document.getElementById("ebCompareFeedback");
+const ebBars = document.getElementById("ebBars");
+const ebBarA = document.getElementById("ebBarA");
+const ebBarB = document.getElementById("ebBarB");
+const ebBarValueA = document.getElementById("ebBarValueA");
+const ebBarValueB = document.getElementById("ebBarValueB");
+const ebCompareReveal = document.getElementById("ebCompareReveal");
+
+const ebSteps = [
+  { type: "round", label: "20 min" },
+  { type: "round", label: "1 hour" },
+  { type: "round", label: "1 day" },
+  { type: "round", label: "1 month" },
+  { type: "plot", label: "Solution" },
+  { type: "compare", label: "Compare" },
+  { type: "takeaway", label: "Takeaway" },
+];
+
+const ebRounds = [
+  {
+    title: "Round 1",
+    clock: "⏱️ 20 minutes",
+    reveal: 40,
+    revealText: "40% forgotten after 20 minutes.",
+  },
+  {
+    title: "Round 2",
+    clock: "🕐 1 hour",
+    reveal: 55,
+    revealText: "More than half — gone in just one hour!",
+  },
+  {
+    title: "Round 3",
+    clock: "🌞🌙 24 hours",
+    reveal: 70,
+    revealText: "After just ONE DAY, 70% is gone!",
+  },
+  {
+    title: "Round 4",
+    clock: "📅 1 month",
+    reveal: 80,
+    revealText: "After a month, only 20% remains...",
+  },
+];
+
+let ebStepIndex = 0;
+
+function renderEbStepper() {
+  if (!ebStepper) return;
+  ebStepper.innerHTML = ebSteps
+    .map((step, index) => `
+      <div class="eb-step" data-step="${index}">
+        <span class="eb-step-dot"></span>
+        <span class="eb-step-label">${step.label}</span>
+      </div>
+    `)
+    .join("");
+}
+
+function updateEbStepper() {
+  if (!ebStepper) return;
+  const items = Array.from(ebStepper.querySelectorAll(".eb-step"));
+  items.forEach((item, index) => {
+    item.classList.toggle("active", index === ebStepIndex);
+    item.classList.toggle("done", index < ebStepIndex);
+  });
+}
+
+function setEbInputValue(value) {
+  const clamped = Math.max(0, Math.min(100, Math.round(Number(value))));
+  if (ebRange) ebRange.value = String(clamped);
+  if (ebNumber) ebNumber.value = String(clamped);
+}
+
+function resetEbReveal() {
+  if (ebReveal) {
+    ebReveal.hidden = true;
+    ebReveal.classList.remove("show");
+  }
+  if (ebBrain) ebBrain.style.setProperty("--fade", "0%");
+  if (ebReaction) ebReaction.textContent = "Make a guess!";
+}
+
+function updateEbRound() {
+  const round = ebRounds[ebStepIndex] || ebRounds[0];
+  if (ebRoundLabel) ebRoundLabel.textContent = round.title;
+  if (ebClock) ebClock.textContent = round.clock;
+  if (ebQuestion) ebQuestion.textContent = "What percentage did he FORGET?";
+  if (ebRevealValue) ebRevealValue.textContent = `${round.reveal}%`;
+  if (ebRevealText) ebRevealText.textContent = round.revealText;
+  if (ebBrainLabel) ebBrainLabel.textContent = `Forgotten: ${round.reveal}%`;
+  if (ebOptions) {
+    ebOptions.querySelectorAll(".option-pill").forEach((btn) => btn.classList.remove("selected"));
+  }
+  setEbInputValue(50);
+  resetEbReveal();
+}
+
+function resetEbCompare() {
+  if (!ebScenarios) return;
+  ebScenarios.querySelectorAll(".eb-scenario").forEach((btn) => {
+    btn.classList.remove("selected", "correct", "wrong");
+  });
+  if (ebCompareFeedback) ebCompareFeedback.textContent = "Make a choice.";
+  if (ebCompareReveal) ebCompareReveal.hidden = true;
+  if (ebBars) ebBars.hidden = true;
+  if (ebBarA) ebBarA.style.width = "0%";
+  if (ebBarB) ebBarB.style.width = "0%";
+}
+
+function setEbView(view) {
+  if (ebRoundView) ebRoundView.hidden = view !== "round";
+  if (ebPlotView) ebPlotView.hidden = view !== "plot";
+  if (ebCompareView) ebCompareView.hidden = view !== "compare";
+  if (ebTakeawayView) ebTakeawayView.hidden = view !== "takeaway";
+}
+
+function updateEbNav() {
+  if (ebPrevStep) ebPrevStep.disabled = ebStepIndex === 0;
+  if (ebNextStep) {
+    ebNextStep.textContent = ebStepIndex === ebSteps.length - 1 ? "Restart" : "Next";
+  }
+}
+
+function showEbStep() {
+  const step = ebSteps[ebStepIndex];
+  if (!step) return;
+  if (step.type === "round") {
+    setEbView("round");
+    updateEbRound();
+  } else if (step.type === "plot") {
+    setEbView("plot");
+    if (ebCurve) ebCurve.classList.add("animate");
+  } else if (step.type === "compare") {
+    setEbView("compare");
+    resetEbCompare();
+  } else {
+    setEbView("takeaway");
+  }
+
+  if (step.type !== "plot" && ebCurve) {
+    ebCurve.classList.remove("animate");
+  }
+
+  updateEbStepper();
+  updateEbNav();
+}
+
+function revealEbRound() {
+  const round = ebRounds[ebStepIndex];
+  if (!round || !ebReveal) return;
+  const guess = Number(ebNumber ? ebNumber.value : ebRange?.value);
+  if (!Number.isFinite(guess)) {
+    if (ebReaction) ebReaction.textContent = "Pick a number first!";
+    return;
+  }
+
+  const diff = Math.abs(guess - round.reveal);
+  let reactionText = "Good intuition!";
+  if (diff > 10 && guess < round.reveal) {
+    reactionText = "Wow, it’s worse than you thought!";
+  } else if (diff > 10 && guess > round.reveal) {
+    reactionText = "Not quite that bad... yet!";
+  }
+
+  if (ebReaction) ebReaction.textContent = reactionText;
+  if (ebRevealValue) ebRevealValue.textContent = `${round.reveal}%`;
+  if (ebRevealText) ebRevealText.textContent = round.revealText;
+  if (ebBrainLabel) ebBrainLabel.textContent = `Forgotten: ${round.reveal}%`;
+  if (ebBrain) ebBrain.style.setProperty("--fade", `${round.reveal}%`);
+  ebReveal.hidden = false;
+  ebReveal.classList.add("show");
+}
+
+function resetEbbinghausGame() {
+  ebStepIndex = 0;
+  showEbStep();
+}
+
+if (ebRange) {
+  ebRange.addEventListener("input", () => setEbInputValue(ebRange.value));
+}
+
+if (ebNumber) {
+  ebNumber.addEventListener("input", () => setEbInputValue(ebNumber.value));
+}
+
+if (ebOptions) {
+  ebOptions.addEventListener("click", (event) => {
+    const btn = event.target.closest(".option-pill");
+    if (!btn) return;
+    const value = btn.dataset.value;
+    ebOptions.querySelectorAll(".option-pill").forEach((pill) => pill.classList.remove("selected"));
+    btn.classList.add("selected");
+    setEbInputValue(value);
+  });
+}
+
+if (ebRevealBtn) {
+  ebRevealBtn.addEventListener("click", revealEbRound);
+}
+
+if (ebResetGuess) {
+  ebResetGuess.addEventListener("click", () => {
+    if (ebOptions) {
+      ebOptions.querySelectorAll(".option-pill").forEach((pill) => pill.classList.remove("selected"));
+    }
+    setEbInputValue(50);
+    resetEbReveal();
+  });
+}
+
+if (ebPrevStep) {
+  ebPrevStep.addEventListener("click", () => {
+    ebStepIndex = Math.max(0, ebStepIndex - 1);
+    showEbStep();
+  });
+}
+
+if (ebNextStep) {
+  ebNextStep.addEventListener("click", () => {
+    if (ebStepIndex >= ebSteps.length - 1) {
+      resetEbbinghausGame();
+      return;
+    }
+    ebStepIndex += 1;
+    showEbStep();
+  });
+}
+
+if (ebScenarios) {
+  ebScenarios.addEventListener("click", (event) => {
+    const btn = event.target.closest(".eb-scenario");
+    if (!btn) return;
+    const choice = btn.dataset.choice;
+    ebScenarios.querySelectorAll(".eb-scenario").forEach((item) => {
+      item.classList.remove("selected", "correct", "wrong");
+    });
+    btn.classList.add("selected");
+    const isCorrect = choice === "B";
+    btn.classList.add(isCorrect ? "correct" : "wrong");
+    if (ebCompareFeedback) {
+      ebCompareFeedback.textContent = isCorrect
+        ? "Correct! Student B remembers much more."
+        : "Not quite. Reviews make a huge difference.";
+    }
+    if (ebBars) ebBars.hidden = false;
+    if (ebCompareReveal) ebCompareReveal.hidden = false;
+    if (ebBarA) ebBarA.style.width = "20%";
+    if (ebBarB) ebBarB.style.width = "65%";
+  });
+}
+
+renderEbStepper();
+showEbStep();
+
+const ebSlideIndex = ebbinghausSlide ? slides.indexOf(ebbinghausSlide) : -1;
+const spacedSlide = document.querySelector('[data-title="4.2 Spaced Repetition"]');
+const spacedSlideIndex = spacedSlide ? slides.indexOf(spacedSlide) : -1;
 
 // Slide 4.1 forgetting curve (removed from deck, keep safe guards)
 const forgettingCanvas = document.getElementById("forgettingCanvas");
@@ -739,10 +1033,15 @@ if (apQuiz) {
 
 function handleSlideActivation() {
   if (currentSlide === 0) startCounter();
-  if (currentSlide === 8) resetHippocampusMatchup();
-  if (currentSlide === 9) drawSpacedCurve();
+  if (currentSlide === 3) resetHippocampusMatchup();
+  if (ebSlideIndex !== -1 && currentSlide === ebSlideIndex) resetEbbinghausGame();
+  if (spacedSlideIndex !== -1 && currentSlide === spacedSlideIndex) drawSpacedCurve();
+  if (app) {
+    app.classList.toggle("light-slide", currentSlide === 3);
+  }
 }
 
 renderGame();
 updateNav();
 handleSlideActivation();
+resetHippocampusMatchup();
