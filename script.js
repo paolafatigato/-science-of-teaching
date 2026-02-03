@@ -622,7 +622,10 @@ function resetEbCompare() {
   });
   if (ebCompareFeedback) ebCompareFeedback.textContent = "Make a choice.";
   if (ebCompareReveal) ebCompareReveal.hidden = true;
-  if (ebBars) ebBars.hidden = true;
+  if (ebBars) {
+    ebBars.hidden = true;
+    ebBars.classList.remove("show-values");
+  }
   if (ebBarA) ebBarA.style.width = "0%";
   if (ebBarB) ebBarB.style.width = "0%";
 }
@@ -764,6 +767,7 @@ if (ebScenarios) {
         : "Not quite. Reviews make a huge difference.";
     }
     if (ebBars) ebBars.hidden = false;
+    if (ebBars) ebBars.classList.add("show-values");
     if (ebCompareReveal) ebCompareReveal.hidden = false;
     if (ebBarA) ebBarA.style.width = "20%";
     if (ebBarB) ebBarB.style.width = "65%";
@@ -1031,17 +1035,455 @@ if (apQuiz) {
   });
 }
 
+// Slide 6.1 amygdala/hippocampus visuals
+const legendButtons = Array.from(document.querySelectorAll(".legend-btn[data-target]"));
+const amygdalaVisual = document.getElementById("amygdalaVisual");
+const hippocampusVisual = document.getElementById("hippocampusVisual");
+const amygdalaHalo = document.getElementById("amygdalaHalo");
+
+function moveHaloTo(targetEl) {
+  if (!targetEl || !amygdalaHalo) return;
+  const row = amygdalaHalo.parentElement;
+  if (!row) return;
+  const rowRect = row.getBoundingClientRect();
+  const targetRect = targetEl.getBoundingClientRect();
+  const centerX = targetRect.left + targetRect.width / 2 - rowRect.left;
+  const centerY = targetRect.top + targetRect.height / 2 - rowRect.top;
+  const hue = Math.floor(15 + Math.random() * 320);
+  amygdalaHalo.style.setProperty("--halo-x", `${centerX}px`);
+  amygdalaHalo.style.setProperty("--halo-y", `${centerY}px`);
+  amygdalaHalo.style.setProperty("--halo-h", String(hue));
+  amygdalaHalo.classList.add("visible");
+}
+
+function highlightLegend(activeButton) {
+  legendButtons.forEach((btn) => {
+    const isActive = btn === activeButton;
+    const item = btn.closest(".legend-item");
+    if (item) item.classList.toggle("active", isActive);
+    btn.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+if (legendButtons.length) {
+  legendButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.target;
+      const targetVisual = target === "amygdala" ? amygdalaVisual : hippocampusVisual;
+      moveHaloTo(targetVisual);
+      highlightLegend(button);
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    const activeBtn = legendButtons.find((btn) => btn.getAttribute("aria-pressed") === "true");
+    const target = activeBtn?.dataset.target === "hippocampus" ? hippocampusVisual : amygdalaVisual;
+    if (amygdalaHalo?.classList.contains("visible")) {
+      moveHaloTo(target || amygdalaVisual || hippocampusVisual);
+    }
+  });
+}
+
+// Slide 6.3 hook ratings
+const hookRatings = document.getElementById("hookRatings");
+const ratingSummary = document.getElementById("ratingSummary");
+
+const hookPrompts = [
+  "Today we study dolphins. Dolphins are mammals.",
+  "Did you know dolphins sleep with one eye OPEN?",
+  "I'm going to show you something scientists couldn't explain for 100 years...",
+  "Open your books to page 34.",
+  "Who here has a pet? What if I told you your pet dreams about YOU?",
+];
+
+const hookRatingsState = new Array(hookPrompts.length).fill(null);
+const hookStarSvg = `
+  <svg class="star-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <path d="M12.224 11.623L16 0l3.776 11.623H32l-9.888 6.865 3.776 11.417L16 22.668 6.112 29.85l3.776-11.362L0 11.623h12.224" />
+  </svg>
+`;
+
+function updateHookAverage() {
+  if (!ratingSummary) return;
+  const valid = hookRatingsState.filter((value) => typeof value === "number");
+  if (!valid.length) {
+    ratingSummary.textContent = "Class average: —";
+    return;
+  }
+  const avg = valid.reduce((sum, value) => sum + value, 0) / valid.length;
+  ratingSummary.textContent = `Class average: ${avg.toFixed(1)} / 5`;
+}
+
+function renderHookRatings() {
+  if (!hookRatings) return;
+  hookRatings.innerHTML = "";
+  hookPrompts.forEach((prompt, index) => {
+    const card = document.createElement("div");
+    card.className = "hook-rating-card";
+    card.innerHTML = `
+      <div class="hook-text-line">${prompt}</div>
+      <div class="star-row" role="group" aria-label="Rate this hook"></div>
+      <div class="rating-value" id="hookRatingValue-${index}">Your rating: —</div>
+    `;
+    const starRow = card.querySelector(".star-row");
+    for (let value = 1; value <= 5; value += 1) {
+      const btn = document.createElement("button");
+      btn.className = "star-btn";
+      btn.type = "button";
+      btn.dataset.value = String(value);
+      btn.setAttribute("aria-label", `Rate ${value} star${value > 1 ? "s" : ""}`);
+      btn.innerHTML = hookStarSvg;
+      btn.addEventListener("click", () => {
+        hookRatingsState[index] = value;
+        const ratingValue = card.querySelector(`#hookRatingValue-${index}`);
+        if (ratingValue) ratingValue.textContent = `Your rating: ${value} / 5`;
+        starRow.querySelectorAll(".star-btn").forEach((star, starIndex) => {
+          star.classList.toggle("selected", starIndex < value);
+        });
+        updateHookAverage();
+      });
+      starRow.appendChild(btn);
+    }
+    hookRatings.appendChild(card);
+  });
+  updateHookAverage();
+}
+
+// Slide 6.4 hook creator
+const hookTopic = document.getElementById("hookTopic");
+const hookOptions = document.getElementById("hookOptions");
+const hookFeedback = document.getElementById("hookFeedback");
+const hookInput = document.getElementById("hookInput");
+const hookSubmit = document.getElementById("hookSubmit");
+const hookSubmissions = document.getElementById("hookSubmissions");
+const hookWinner = document.getElementById("hookWinner");
+
+const hookOptionBank = {
+  Recycling: {
+    best: 1,
+    options: [
+      "Today we will learn about recycling. Please take notes.",
+      "What if your trash could become a NEW skateboard?",
+      "Open your books to page 78.",
+      "Recycling means turning old things into new things.",
+    ],
+  },
+  "The water cycle": {
+    best: 2,
+    options: [
+      "The water cycle has four stages.",
+      "Please copy the diagram from the board.",
+      "If the rain never stopped, what would happen to your city?",
+      "We will define evaporation and condensation.",
+    ],
+  },
+  Adjectives: {
+    best: 0,
+    options: [
+      "This sentence is boring. Can you make it EPIC?",
+      "Adjectives describe nouns.",
+      "Turn to page 34.",
+      "We will list adjective examples.",
+    ],
+  },
+};
+
+const customHooks = [];
+
+function renderHookOptions() {
+  if (!hookOptions || !hookTopic) return;
+  const topic = hookTopic.value;
+  const data = hookOptionBank[topic];
+  if (!data) return;
+  hookOptions.innerHTML = "";
+  if (hookFeedback) hookFeedback.textContent = "Choose a hook.";
+  data.options.forEach((text, index) => {
+    const option = document.createElement("button");
+    option.type = "button";
+    option.className = "hook-option";
+    option.dataset.index = String(index);
+    option.textContent = text;
+    option.addEventListener("click", () => {
+      hookOptions.querySelectorAll(".hook-option").forEach((btn) => {
+        btn.classList.remove("best", "wrong");
+      });
+      const isBest = index === data.best;
+      option.classList.add(isBest ? "best" : "wrong");
+      if (hookFeedback) {
+        hookFeedback.textContent = isBest
+          ? "Great hook! It uses emotion/curiosity to grab attention."
+          : "Not the strongest. Try surprise, mystery, or personal connection.";
+      }
+    });
+    hookOptions.appendChild(option);
+  });
+}
+
+function updateHookWinner() {
+  if (!hookWinner) return;
+  if (!customHooks.length) {
+    hookWinner.textContent = "Top hook: —";
+    return;
+  }
+  const sorted = [...customHooks].sort((a, b) => b.votes - a.votes);
+  hookWinner.textContent = `Top hook: ${sorted[0].text} (${sorted[0].votes} votes)`;
+}
+
+function renderHookSubmissions() {
+  if (!hookSubmissions) return;
+  hookSubmissions.innerHTML = "";
+  customHooks.forEach((hook) => {
+    const row = document.createElement("div");
+    row.className = "hook-submission";
+    row.innerHTML = `
+      <div>${hook.text}</div>
+      <button class="hook-vote" type="button">Vote <span>${hook.votes}</span></button>
+    `;
+    const voteBtn = row.querySelector(".hook-vote");
+    voteBtn.addEventListener("click", () => {
+      hook.votes += 1;
+      const count = voteBtn.querySelector("span");
+      if (count) count.textContent = String(hook.votes);
+      updateHookWinner();
+    });
+    hookSubmissions.appendChild(row);
+  });
+  updateHookWinner();
+}
+
+if (hookTopic) {
+  hookTopic.addEventListener("change", renderHookOptions);
+}
+
+if (hookSubmit) {
+  hookSubmit.addEventListener("click", () => {
+    if (!hookInput) return;
+    const text = hookInput.value.trim();
+    if (!text) return;
+    customHooks.push({ text, votes: 0 });
+    hookInput.value = "";
+    renderHookSubmissions();
+  });
+}
+
+// Slide 7.1 working memory indicator
+const memoryRange = document.getElementById("memoryCompletion");
+const memoryIndicator = document.querySelector(".memory-indicator");
+const memoryOutput = document.getElementById("memoryOutput");
+
+function setMemoryValue(value) {
+  if (!memoryIndicator || !memoryOutput) return;
+  const numeric = Math.max(0, Math.min(10, Number(value)));
+  const percent = (numeric / 10) * 100;
+  memoryOutput.value = String(numeric);
+  memoryOutput.textContent = String(numeric);
+  memoryOutput.classList.toggle("overload", numeric > 7);
+  memoryIndicator.style.setProperty("--completion", `${percent}%`);
+}
+
+if (memoryRange) {
+  setMemoryValue(memoryRange.value);
+  memoryRange.addEventListener("input", (event) => {
+    setMemoryValue(event.target.value);
+  });
+}
+
+// Slide 7.2 bad vs good teaching
+const badGoodSlide = document.querySelector('[data-title="7.2 Bad vs Good Teaching"]');
+const goodRevealBtn = document.getElementById("goodRevealBtn");
+const goodPoints = badGoodSlide ? Array.from(badGoodSlide.querySelectorAll("#goodPoints li")) : [];
+const badGoodSlideIndex = badGoodSlide ? slides.indexOf(badGoodSlide) : -1;
+let goodRevealTimers = [];
+
+function resetGoodPoints() {
+  goodRevealTimers.forEach((timer) => clearTimeout(timer));
+  goodRevealTimers = [];
+  goodPoints.forEach((item) => item.classList.remove("show"));
+}
+
+function playGoodPoints() {
+  if (!goodPoints.length) return;
+  resetGoodPoints();
+  goodPoints.forEach((item, index) => {
+    const timer = setTimeout(() => item.classList.add("show"), 500 + index * 700);
+    goodRevealTimers.push(timer);
+  });
+}
+
+if (goodRevealBtn) {
+  goodRevealBtn.addEventListener("click", playGoodPoints);
+}
+
+// Slide 7.3 organize the chaos
+const chaosFactBank = document.getElementById("factBank");
+const chaosCategoryGrid = document.getElementById("categoryGrid");
+const chaosShuffle = document.getElementById("chaosShuffle");
+const chaosScore = document.getElementById("chaosScore");
+const chaosFeedback = document.getElementById("chaosFeedback");
+const chaosSlide = document.querySelector('[data-title="7.3 Organize the Chaos"]');
+const chaosSlideIndex = chaosSlide ? slides.indexOf(chaosSlide) : -1;
+
+const chaosFacts = [
+  { text: "Dolphins are mammals", category: "What they ARE" },
+  { text: "They breathe air", category: "What they ARE" },
+  { text: "They are warm-blooded", category: "What they ARE" },
+  { text: "They live in oceans worldwide", category: "Where they LIVE" },
+  { text: "Many live in coastal waters", category: "Where they LIVE" },
+  { text: "Some live in rivers", category: "Where they LIVE" },
+  { text: "They live in social groups", category: "How they ACT" },
+  { text: "They use echolocation", category: "How they ACT" },
+  { text: "They can swim up to 35 mph", category: "How they ACT" },
+  { text: "They sleep with one eye open", category: "Something AMAZING" },
+  { text: "They have signature whistles (names)", category: "Something AMAZING" },
+  { text: "They can recognize themselves in mirrors", category: "Something AMAZING" },
+];
+
+let chaosScoreValue = 0;
+
+function resetChaosZones() {
+  if (!chaosCategoryGrid) return;
+  chaosCategoryGrid.querySelectorAll(".dropzone").forEach((zone) => {
+    zone.innerHTML = "";
+  });
+  chaosCategoryGrid.querySelectorAll(".category").forEach((cat) => cat.classList.remove("shake"));
+}
+
+function renderChaosFacts() {
+  if (!chaosFactBank) return;
+  chaosFactBank.innerHTML = "";
+  const shuffled = shuffleCopy(chaosFacts);
+  shuffled.forEach((fact, index) => {
+    const card = document.createElement("div");
+    card.className = "fact-card";
+    card.draggable = true;
+    card.dataset.category = fact.category;
+    card.dataset.factId = `fact-${index}`;
+    card.textContent = fact.text;
+    chaosFactBank.appendChild(card);
+  });
+}
+
+function resetChaosGame() {
+  if (!chaosFactBank || !chaosCategoryGrid) return;
+  chaosScoreValue = 0;
+  if (chaosScore) chaosScore.textContent = "0";
+  if (chaosFeedback) chaosFeedback.textContent = "Drag facts into categories.";
+  resetChaosZones();
+  renderChaosFacts();
+}
+
+if (chaosFactBank) {
+  chaosFactBank.addEventListener("dragstart", (event) => {
+    const card = event.target.closest(".fact-card");
+    if (!card || !event.dataTransfer) return;
+    event.dataTransfer.setData("text/plain", card.dataset.factId);
+    event.dataTransfer.effectAllowed = "move";
+  });
+}
+
+if (chaosCategoryGrid) {
+  chaosCategoryGrid.addEventListener("dragover", (event) => {
+    if (event.target.closest(".dropzone")) {
+      event.preventDefault();
+    }
+  });
+
+  chaosCategoryGrid.addEventListener("drop", (event) => {
+    const zone = event.target.closest(".dropzone");
+    if (!zone || !event.dataTransfer) return;
+    event.preventDefault();
+    const factId = event.dataTransfer.getData("text/plain");
+    if (!factId) return;
+    const card = document.querySelector(`[data-fact-id="${factId}"]`);
+    if (!card || card.classList.contains("sorted")) return;
+    const category = zone.closest(".category")?.dataset.category;
+    if (!category) return;
+
+    if (card.dataset.category === category) {
+      zone.appendChild(card);
+      card.classList.add("sorted");
+      card.draggable = false;
+      chaosScoreValue += 1;
+      if (chaosScore) chaosScore.textContent = String(chaosScoreValue);
+      if (chaosFeedback) chaosFeedback.textContent = "Nice! Keep organizing.";
+      if (chaosScoreValue === chaosFacts.length && chaosFeedback) {
+        chaosFeedback.textContent = "Awesome! Organization makes memory easier.";
+      }
+    } else {
+      const categoryCard = zone.closest(".category");
+      if (categoryCard) {
+        categoryCard.classList.add("shake");
+        setTimeout(() => categoryCard.classList.remove("shake"), 400);
+      }
+      if (chaosFeedback) chaosFeedback.textContent = "Not quite. Try a different category.";
+    }
+  });
+}
+
+if (chaosShuffle) {
+  chaosShuffle.addEventListener("click", resetChaosGame);
+}
+
+// Slide 6.2 proof spotlight
+const proofSlideIndex = slides.findIndex((slide) => slide.dataset.title === "6.2 Proof");
+const proofSlide = proofSlideIndex !== -1 ? slides[proofSlideIndex] : null;
+const proofCards = proofSlide ? Array.from(proofSlide.querySelectorAll(".question-card")) : [];
+const proofDurations = [33000, 60000, 60000];
+let proofTimerId;
+
+function setProofSpotlight(index) {
+  proofCards.forEach((card, idx) => {
+    card.classList.toggle("is-spotlight", idx === index);
+  });
+}
+
+function startProofSpotlight() {
+  if (!proofCards.length) return;
+  stopProofSpotlight();
+  let idx = 0;
+  const advance = () => {
+    setProofSpotlight(idx);
+    const duration = proofDurations[idx] ?? 60000;
+    idx = (idx + 1) % proofCards.length;
+    proofTimerId = setTimeout(advance, duration);
+  };
+  advance();
+}
+
+function stopProofSpotlight() {
+  clearTimeout(proofTimerId);
+  proofCards.forEach((card) => card.classList.remove("is-spotlight"));
+}
+
 function handleSlideActivation() {
   if (currentSlide === 0) startCounter();
   if (currentSlide === 3) resetHippocampusMatchup();
   if (ebSlideIndex !== -1 && currentSlide === ebSlideIndex) resetEbbinghausGame();
   if (spacedSlideIndex !== -1 && currentSlide === spacedSlideIndex) drawSpacedCurve();
+  if (badGoodSlideIndex !== -1 && currentSlide === badGoodSlideIndex) {
+    playGoodPoints();
+  } else {
+    resetGoodPoints();
+  }
+  if (chaosSlideIndex !== -1 && currentSlide === chaosSlideIndex) {
+    resetChaosGame();
+  }
+  if (proofSlideIndex !== -1 && currentSlide === proofSlideIndex) {
+    startProofSpotlight();
+  } else {
+    stopProofSpotlight();
+  }
   if (app) {
-    app.classList.toggle("light-slide", currentSlide === 3);
+    const isLight = slides[currentSlide]?.classList.contains("light-bg");
+    app.classList.toggle("light-slide", Boolean(isLight));
   }
 }
 
 renderGame();
+renderHookRatings();
+renderHookOptions();
+renderHookSubmissions();
+resetChaosGame();
 updateNav();
 handleSlideActivation();
 resetHippocampusMatchup();

@@ -85,11 +85,11 @@
               <div class="contender-icons">🎓</div>
             </button>
             <button class="contender-card taxi" data-choice="taxi" data-correct="true" aria-label="London Taxi Driver">
-              <div class="contender-title">London Taxi Driver</div>
+              <div class="contender-title">Taxi Driver</div>
               <div class="contender-icons">🚕</div>
             </button>
             <button class="contender-card" data-choice="athlete" aria-label="Athlete">
-              <div class="contender-title">Athlete</div>
+              <div class="contender-title">Marathon Athlete</div>
               <div class="contender-icons">🏃‍♂️</div>
             </button>
             <button class="contender-card" data-choice="electrician" aria-label="Electrician">
@@ -97,11 +97,11 @@
               <div class="contender-icons">⚡</div>
             </button>
             <button class="contender-card" data-choice="actress" aria-label="Actress">
-              <div class="contender-title">Actress</div>
+              <div class="contender-title">Theater Actress</div>
               <div class="contender-icons">🎭</div>
             </button>
             <button class="contender-card" data-choice="doctor" aria-label="Doctor">
-              <div class="contender-title">Doctor</div>
+              <div class="contender-title">Surgeon</div>
               <div class="contender-icons">🩺</div>
             </button>
           </div>
@@ -433,11 +433,204 @@
           <div class="ap-feedback" id="apFeedback">Make your picks!</div>
         </div>
       </section>
+
+      <!-- Slide 6.1 -->
+      <section class="slide" data-title="6.1 The Amygdala Connection" data-section="Emotions and Memory">
+        <div class="content">
+          <h1>The Amygdala Connection</h1>
+          <div class="amygdala-layout">
+            <div class="amygdala-row" id="amygdalaRow">
+              <div class="shared-halo" id="amygdalaHalo" aria-hidden="true"></div>
+              <div class="brain-image amygdala" id="amygdalaVisual">
+                <img src="amygdala.png" alt="Amygdala" loading="lazy" />
+              </div>
+              <div class="amygdala-legend">
+                <div class="legend-item">
+                  <span class="legend-swatch warm"></span>
+                  <div>
+                    <button class="legend-btn" type="button" data-target="amygdala" aria-controls="amygdalaVisual">Amygdala</button>
+                    <div class="legend-sub">Emotions</div>
+                  </div>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-swatch cool"></span>
+                  <div>
+                    <button class="legend-btn" type="button" data-target="hippocampus" aria-controls="hippocampusVisual">Hippocampus</button>
+                    <div class="legend-sub">Memory</div>
+                  </div>
+                </div>
+              </div>
+              <div class="brain-image hippocampus" id="hippocampusVisual">
+                <img src="ippocampo.png" alt="Hippocampus" loading="lazy" />
+              </div>
+            </div>
+          </div>
+          <p class="big">They are neighbors. They communicate constantly. <strong>Emotions make memories stronger.</strong></p>
+        </div>
+      </section>
+
+      <!-- Slide 6.2 -->
+      <section class="slide" data-title="6.2 Proof" data-section="Emotions and Memory">
+        <div class="content">
+          <h1>Proof</h1>
+          <p class="subtitle">Discuss with your deskmate:</p>
+          <div class="question-list">
+            <div class="question-card" data-question="1">
+              <span class="borderLine" aria-hidden="true"></span>
+              <span class="question-text">What did you eat for lunch 2 Tuesdays ago?</span>
+            </div>
+            <div class="question-card" data-question="2">
+              <span class="borderLine" aria-hidden="true"></span>
+              <span class="question-text">What was your first day of school like?</span>
+            </div>
+            <div class="question-card" data-question="3">
+              <span class="borderLine" aria-hidden="true"></span>
+              <span class="question-text">What moment made you very embarrassed?</span>
+            </div>
+          </div>
+          <p class="highlight">Emotion = stronger memory</p>
+        </div>
+      </section>
+
+      <!-- Slide 6.3 -->
+      <section class="slide" data-title="6.3 Rate the Hooks" data-section="Emotions and Memory">
+        <div class="content">
+          <h1>Interactive: Rate the Hooks</h1>
+          <p class="big">Rate each lesson opening 1-5 stars on “How interesting/memorable?”</p>
+          <div class="hook-ratings" id="hookRatings"></div>
+          <div class="rating-summary" id="ratingSummary">Class average: —</div>
+          <div class="hook-takeaways">
+            <div class="takeaway-title">What makes hooks work?</div>
+            <ul>
+              <li>Surprise</li>
+              <li>Mystery</li>
+              <li>Personal connection</li>
+              <li>Challenge</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6.4 -->
+      <section class="slide" data-title="6.4 Hook Creator" data-section="Emotions and Memory">
+        <div class="content">
+          <h1>Game: Hook Creator</h1>
+          <p class="big">Pick the best hook for a boring topic — or write your own.</p>
+          <div class="hook-creator" id="hookCreator">
+            <div class="hook-topics">
+              <label for="hookTopic">Choose a topic:</label>
+              <select id="hookTopic">
+                <option value="Recycling">Recycling</option>
+                <option value="The water cycle">The water cycle</option>
+                <option value="Adjectives">Adjectives</option>
+              </select>
+            </div>
+            <div class="hook-options" id="hookOptions"></div>
+            <div class="hook-feedback" id="hookFeedback">Choose a hook.</div>
+          </div>
+          <div class="hook-custom">
+            <h2>Write your own hook</h2>
+            <div class="hook-input-row">
+              <input type="text" id="hookInput" placeholder="Type your hook here..." />
+              <button class="primary" id="hookSubmit">Submit</button>
+            </div>
+            <div class="hook-submissions" id="hookSubmissions"></div>
+            <div class="hook-winner" id="hookWinner">Top hook: —</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7.1 -->
+      <section class="slide light-bg" data-title="7.1 The Overloaded Brain" data-section="Cognitive Load">
+        <div class="content">
+          <h1>The Overloaded Brain</h1>
+          <p class="big">Your working memory is <strong>LIMITED</strong> — like a small bucket, 7 ± 2.</p>
+          <div class="memory-visual">
+            <div class="memory-indicator">
+              <div class="indicator">
+                <output id="memoryOutput" name="result" for="memoryCompletion">5</output>
+              </div>
+              <div class="memory-label">Working Memory</div>
+            </div>
+            <div class="memory-items" aria-hidden="true">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+              <span class="muted">8</span><span class="muted">9</span>
+            </div>
+          </div>
+          <div class="memory-control">
+            <input id="memoryCompletion" type="range" min="0" max="10" step="1" value="5" aria-label="Working memory load" />
+          </div>
+          <p class="highlight">If we pour too much in, it spills.</p>
+        </div>
+      </section>
+
+      <!-- Slide 7.2 -->
+      <section class="slide light-bg" data-title="7.2 Bad vs Good Teaching" data-section="Cognitive Load">
+        <div class="content">
+          <h1>Bad vs Good Teaching</h1>
+          <div class="compare-grid">
+            <div class="compare-panel bad">
+              <div class="panel-title">Bad: chaos</div>
+              <div class="chaos-text">
+                Dolphins are mammals that breathe air and live in oceans and there are 40 species and they use
+                echolocation and they eat fish and they live in pods and they swim 20 mph and they sleep with one eye open and...
+              </div>
+              <div class="chaos-tags">
+                <span>Text</span><span>More text</span><span>Colors</span><span>No structure</span><span>Overload</span>
+              </div>
+            </div>
+            <div class="compare-panel good">
+              <div class="panel-title">Good: organized</div>
+              <ol class="good-points" id="goodPoints">
+                <li>What they <strong>ARE</strong></li>
+                <li>Where they <strong>LIVE</strong></li>
+                <li>Something <strong>AMAZING</strong></li>
+              </ol>
+              <button class="secondary" id="goodRevealBtn">Replay reveal</button>
+            </div>
+          </div>
+          <p class="big">Which one helps you learn?</p>
+        </div>
+      </section>
+
+      <!-- Slide 7.3 -->
+      <section class="slide light-bg" data-title="7.3 Organize the Chaos" data-section="Cognitive Load">
+        <div class="content">
+          <h1>Interactive: Organize the Chaos</h1>
+          <p class="big">Drag 12 facts into 4 categories. Organization = memory power.</p>
+          <div class="chaos-game">
+            <div class="fact-bank" id="factBank" aria-label="Fact bank"></div>
+            <div class="category-grid" id="categoryGrid">
+              <div class="category" data-category="What they ARE">
+                <div class="category-title">What they ARE</div>
+                <div class="dropzone" aria-label="Drop facts here"></div>
+              </div>
+              <div class="category" data-category="Where they LIVE">
+                <div class="category-title">Where they LIVE</div>
+                <div class="dropzone" aria-label="Drop facts here"></div>
+              </div>
+              <div class="category" data-category="How they ACT">
+                <div class="category-title">How they ACT</div>
+                <div class="dropzone" aria-label="Drop facts here"></div>
+              </div>
+              <div class="category" data-category="Something AMAZING">
+                <div class="category-title">Something AMAZING</div>
+                <div class="dropzone" aria-label="Drop facts here"></div>
+              </div>
+            </div>
+          </div>
+          <div class="game-bar">
+            <button class="secondary" id="chaosShuffle">Shuffle facts</button>
+            <div class="score">Sorted: <span id="chaosScore">0</span>/12</div>
+          </div>
+          <div class="feedback" id="chaosFeedback">Drag facts into categories.</div>
+        </div>
+      </section>
     </main>
 
     <footer class="nav">
       <button class="nav-btn" id="prevBtn" aria-label="Previous slide">◀</button>
-      <span class="nav-info" id="navInfo">1 / 12</span>
+      <span class="nav-info" id="navInfo">1 / 21</span>
       <button class="nav-btn" id="nextBtn" aria-label="Next slide">▶</button>
     </footer>
   </div>
